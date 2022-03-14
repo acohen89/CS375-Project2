@@ -2,6 +2,7 @@
 insertContestant <1> <0>
 insertContestant <2> <15>
 insertContestant <3> <80>
+insertContestant <3> <80>
 insertContestant <4> <20>
 showContestants
 findContestant <5>

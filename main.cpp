@@ -27,20 +27,54 @@ int parseInput(string s){
     return stoi(ret); 
 }
 // void findContestant(Contestant k){}
-// void eliminateWeakest(){}
 // void earnPoints(Contestant k, int points){}
 // void losePoints(Contestant k, int points){}
 // void showHandles(){}
 // void showLocation(){}
 // void crownWinner(){}
 
-void findContestant(int id, Contestant contsHeap[], int loc[], int nextI){
-    //TODO: does not work yet 
-    if(nextI <= id || contsHeap[loc[id]].getInit() == 0){
-        cout << "Contestant <" << id <<"> is not in the extended heap" << endl;
+void minHeapify(Contestant contsHeap[], int start, int arrSize){
+    int left = 2*start; 
+    int right = (2*start) + 1;
+    int smallest = -1; 
+    if(left <= arrSize && contsHeap[left].getPoints() < contsHeap[start].getPoints()){
+        smallest = left;
+    }else {smallest = start;}
+    if (right <= arrSize && contsHeap[right].getPoints() < contsHeap[smallest].getPoints()){
+        smallest = right; 
+    } 
+    if(smallest != start){
+        Contestant temp = contsHeap[start]; 
+        contsHeap[start] = contsHeap[smallest];
+        contsHeap[smallest] = temp;
+        minHeapify(contsHeap, smallest, arrSize); 
+    }
+}
+
+void eliminateWeakest(Contestant contsHeap[], int arrSize, int *nextI){
+    if(*nextI <= 1){
+        cout << "No contestant can be eliminated since the extended heap is empty." << endl;
         return; 
     }
-    cout << "Contestant <" << id << "> is in the extended heap with score <" << contsHeap[loc[id]].getPoints() << ">." << endl; 
+    Contestant smallest = contsHeap[1]; 
+    contsHeap[1] = contsHeap[arrSize]; 
+    *nextI = *nextI - 1;
+    minHeapify(contsHeap, 1, arrSize);
+    cout << "Contestant <" << smallest.getId() << "> with current lowest score <" << smallest.getPoints()<< "> eliminated." << endl;
+    
+
+}
+bool findContestant(int id, Contestant contsHeap[], int loc[], int nextI, bool print = true){
+    if(nextI <= id || contsHeap[loc[id]].getInit() == 0){
+        if(print){
+            cout <<  "Contestant <" << id <<"> is not in the extended heap" << endl; 
+        }
+        return false; 
+    }
+    if(print){
+        cout << "Contestant <" << id << "> is in the extended heap with score <" << contsHeap[loc[id]].getPoints() << ">." << endl; 
+    }
+    return true;
 }
 void showContestants(Contestant *contsHeap, int arrSize){
     for(int i = 1; i < arrSize; i++){
@@ -68,18 +102,21 @@ Contestant *insertContestant(int k, int score, Contestant contsHeap[], int arrSi
         return contsHeap;
 
     }
-    //TODO: see if contestant is in array
-    int i =  *nextI;
-    contsHeap[*nextI] = c;           
-    while (i > 1 && contsHeap[i/2].getPoints() > contsHeap[i].getPoints()){ //*make sure we floor
-        Contestant temp = contsHeap[i/2]; 
-        contsHeap[i/2] = contsHeap[i]; 
-        contsHeap[i] = temp; 
-        i = i/2; 
+    if(!findContestant(k, contsHeap, loc, *nextI, false)){
+        int i =  *nextI;
+        contsHeap[*nextI] = c;           
+        while (i > 1 && contsHeap[i/2].getPoints() > contsHeap[i].getPoints()){ //*make sure we floor
+            Contestant temp = contsHeap[i/2]; 
+            contsHeap[i/2] = contsHeap[i]; 
+            contsHeap[i] = temp; 
+            i = i/2; 
+        }
+        loc[k] = i;
+        *nextI = *nextI + 1;
+        cout << "Contestant <" << k << "> inserted with initial score <" <<  score << ">." << endl;
+    } else {
+        cout << "Contestant <" << k << "> is already in the extended heap: cannot insert." << endl;
     }
-    loc[k] = i;
-    *nextI = *nextI + 1;
-    cout << "Contestant <" << k << "> inserted with initial score <" <<  score << ">." << endl;
     return contsHeap;
 }
 
@@ -116,9 +153,10 @@ int main(int argc, char *argv[]){
                 } else if(lineVector.at(0) == "findContestant"){
                     findContestant(parseInput(lineVector.at(1)), contsHeap, loc, *nextI); 
                 } 
-                // else if(lineVector.at(0) == "eliminateWeakest"){
-
-                // } else if(lineVector.at(0) == "losePoints"){
+                else if(lineVector.at(0) == "eliminateWeakest"){
+                    eliminateWeakest(contsHeap, arrSize, nextI);
+                } 
+                // else if(lineVector.at(0) == "losePoints"){
 
                 // } else if(lineVector.at(0) == "earnPoints"){
 
