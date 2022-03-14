@@ -26,12 +26,11 @@ int parseInput(string s){
     }
     return stoi(ret); 
 }
-// void findContestant(Contestant k){}
 // void earnPoints(Contestant k, int points){}
-// void losePoints(Contestant k, int points){}
 // void showHandles(){}
 // void showLocation(){}
 // void crownWinner(){}
+
 
 void minHeapify(Contestant contsHeap[], int start, int arrSize){
     int left = 2*start; 
@@ -85,6 +84,22 @@ void showContestants(Contestant *contsHeap, int arrSize){
         }
             // cout << "Contestant <" << cur.getId() << "> in extended heap location <" << i;
             // cout << "> with score <" << cur.getPoints() << ">. " << cur.getInit() << endl;
+    }
+}
+
+void losePoints(int id, int points, Contestant contsHeap[], int arrSize, int *nextI, int loc[]){
+    if(findContestant(id, contsHeap, loc, *nextI, false)){
+        int i = loc[id]; 
+        int newScore = contsHeap[i].pointDif(true, points);
+        while(i > 1 && contsHeap[i/2].getPoints() > contsHeap[i].getPoints()){
+            Contestant temp = contsHeap[i]; 
+            contsHeap[i] = contsHeap[i/2]; 
+            contsHeap[i/2] = temp; 
+            i = i/2; 
+        }
+        cout << "Contestant <" << id << ">’s score decreased by <" << points << "> points to <" << newScore << ">." << endl;
+    }else {
+        cout << "Contestant <" << id << "> is not in the extended heap." << endl;
     }
 }
 
@@ -155,10 +170,10 @@ int main(int argc, char *argv[]){
                 } 
                 else if(lineVector.at(0) == "eliminateWeakest"){
                     eliminateWeakest(contsHeap, arrSize, nextI);
-                } 
-                // else if(lineVector.at(0) == "losePoints"){
-
-                // } else if(lineVector.at(0) == "earnPoints"){
+                }  else if(lineVector.at(0) == "losePoints"){
+                    losePoints(parseInput(lineVector.at(1)), parseInput(lineVector.at(2)), contsHeap, arrSize, nextI, loc); 
+                }
+                //  else if(lineVector.at(0) == "earnPoints"){
 
                 // } else if(lineVector.at(0) == "showHandles"){
 

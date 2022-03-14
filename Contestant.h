@@ -18,6 +18,7 @@ class Contestant {
         bool getInit(){return init;}
         int getId(){return id;}
         int getPoints(){return points;}
+        int pointDif(bool, int);
     private: 
         int points;
         int id; 

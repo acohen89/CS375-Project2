@@ -9,4 +9,4 @@ contestant.o: Contestant.cpp
 
 clean: 
 	rm -f core *.o 
-	rm cohen_p2.exe
+	rm cohen_p2

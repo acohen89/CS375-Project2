@@ -8,7 +8,6 @@ showContestants
 findContestant <5>
 eliminateWeakest
 losePoints <3> <40>
-earnPoints <2> <10>
 showContestants
 showHandles
 crownWinner
