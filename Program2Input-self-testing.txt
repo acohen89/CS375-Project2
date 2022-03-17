@@ -9,5 +9,5 @@ insertContestant <7> <5>
 insertContestant <8> <17>
 insertContestant <9> <2>
 showContestants
-losePoints <2> <10>
+losePoints <3> <10>
 showContestants

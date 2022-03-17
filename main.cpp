@@ -47,7 +47,7 @@ void minHeapify(Contestant contsHeap[], int start, int arrSize){
 
 
 bool findContestant(int id, Contestant contsHeap[], int loc[], int nextI, bool print = true){
-    if(nextI <= id || contsHeap[loc[id]].getInit() == 0){
+    if(nextI >= id || contsHeap[loc[id]].getInit() == 0){
         if(print){
             cout <<  "Contestant <" << id <<"> is not in the extended heap" << endl; 
         }
@@ -146,13 +146,16 @@ Contestant *insertContestant(int k, int score, Contestant contsHeap[], int arrSi
     if(!findContestant(k, contsHeap, loc, *nextI, false)){
         int i =  *nextI;
         contsHeap[*nextI] = c;           
+        loc[k] = i;
         while (i > 1 && contsHeap[i/2].getPoints() > contsHeap[i].getPoints()){
             Contestant temp = contsHeap[i/2]; 
+            int tempi = temp.getId();   
+            loc[temp.getId()] = loc[contsHeap[i].getId()];
+            loc[contsHeap[i].getId()] = loc[temp.getId()]; 
             contsHeap[i/2] = contsHeap[i]; 
             contsHeap[i] = temp; 
             i = i/2; 
         }
-        loc[k] = i;
         *nextI = *nextI + 1;
         cout << "Contestant <" << k << "> inserted with initial score <" <<  score << ">." << endl;
     } else {
