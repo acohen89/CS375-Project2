@@ -1,0 +1,23 @@
+8
+insertContestant <1> <3>
+insertContestant <2> <15>
+insertContestant <3> <80>
+insertContestant <4> <20>
+insertContestant <5> <20>
+insertContestant <6> <22>
+insertContestant <7> <5>
+insertContestant <8> <17>
+insertContestant <9> <2>
+showContestants
+earnPoints <4> <10>
+earnPoints <1> <34>
+earnPoints <2> <16>
+losePoints <2> <9>
+earnPoints <8> <11>
+losePoints <5> <0>
+losePoints <3> <6>
+showContestants
+eliminateWeakest
+showContestants
+crownWinner
+showContestants
